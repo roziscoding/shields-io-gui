@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { defineComponent } from 'vue'
+  import { defineComponent, PropType } from 'vue'
 
   export default defineComponent({
     props: {
@@ -16,7 +16,7 @@
         required: true
       },
       options: {
-        type: Array,
+        type: Array as PropType<{ name: string; value: string }[]>,
         required: true
       },
       modelValue: {
@@ -28,15 +28,25 @@
   })
 </script>
 <template>
-  <label :for="id">{{ label }}</label>
-  <select
-    :name="name"
-    :id="id"
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-  >
-    <option v-for="option in options" :value="option" :key="option">
-      {{ option }}
-    </option>
-  </select>
+  <div class="field">
+    <label class="label" :for="id">{{ label }}</label>
+    <!-- <div class="select">
+      <select>
+        <option>Select dropdown</option>
+        <option>With options</option>
+      </select>
+    </div> -->
+    <div class="select">
+      <select
+        :name="name"
+        :id="id"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
+      >
+        <option v-for="option in options" :value="option.value" :key="option.value">
+          {{ option.name }}
+        </option>
+      </select>
+    </div>
+  </div>
 </template>

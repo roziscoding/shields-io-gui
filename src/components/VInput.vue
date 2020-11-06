@@ -25,12 +25,17 @@
 </script>
 
 <template>
-  <label :for="id">{{ label }}&nbsp;</label><br />
-  <input
-    :type="type"
-    :id="id"
-    :name="name"
-    :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
-  />
+  <div class="field">
+    <label class="label" :for="id">{{ label }}&nbsp;</label>
+    <div class="control">
+      <input
+        class="input"
+        :type="type"
+        :id="id"
+        :name="name"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
+      />
+    </div>
+  </div>
 </template>

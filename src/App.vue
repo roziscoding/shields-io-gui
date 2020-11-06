@@ -1,9 +1,20 @@
 <script lang="ts">
-  import { computed, ref } from 'vue'
+  import simpleIcons from 'simple-icons'
+  import { computed, ref, watch } from 'vue'
+
+  const icons = Object.entries(simpleIcons).map(([key, value]) => ({
+    name: key,
+    value: (value as any).slug
+  }))
+
   export default {
     name: 'App',
     data: () => ({
-      styles: ['plastic', 'flat', 'flat-square', 'for-the-badge', 'social']
+      styles: ['plastic', 'flat', 'flat-square', 'for-the-badge', 'social'].map((style) => ({
+        name: style,
+        value: style
+      })),
+      icons
     }),
     setup() {
       const label = ref('')
@@ -28,6 +39,10 @@
 
       const alt = computed(() => `${label.value} ${message.value}`.trim())
 
+      watch(logo, (slug) => {
+        color.value = simpleIcons.get(slug).hex
+      })
+
       return {
         label,
         message,
@@ -43,40 +58,59 @@
 </script>
 
 <template>
-  <v-input label="Label" type="text" name="label" id="label" v-model="label" /><br /><br />
-  <v-input label="Message" type="text" name="message" id="message" v-model="message" /><br /><br />
-  <v-input label="Color" type="text" name="color" id="color" v-model="color" /><br /><br />
-  <v-input label="Logo" type="text" name="logo" id="logo" v-model="logo" /><br /><br />
-  <v-input
-    label="Logo Color"
-    type="text"
-    name="logoColor"
-    id="logoColor"
-    v-model="logoColor"
-  /><br /><br />
-  <v-select
-    label="Style"
-    name="style"
-    id="style"
-    v-model="style"
-    :options="styles"
-  /><br /><br /><br />
+  <section class="section">
+    <div class="container is-fluid">
+      <h1 class="title">Shield.io Generator</h1>
+      <div class="columns">
+        <div class="column">
+          <v-input label="Label" type="text" name="label" id="label" v-model="label" />
+        </div>
+        <div class="column">
+          <v-input label="Message" type="text" name="message" id="message" v-model="message" />
+        </div>
+        <div class="column">
+          <v-input label="Color" type="text" name="color" id="color" v-model="color" />
+        </div>
+        <div class="column">
+          <v-select label="Logo" name="logo" id="logo" v-model="logo" :options="icons" />
+        </div>
+        <div class="column">
+          <v-input
+            label="Logo Color"
+            type="text"
+            name="logoColor"
+            id="logoColor"
+            v-model="logoColor"
+          />
+        </div>
+        <div class="column">
+          <v-select label="Style" name="style" id="style" v-model="style" :options="styles" />
+        </div>
+      </div>
 
-  Preview:
-  <br /><br />
-  <img :src="url" :alt="alt" :height="50" />
-  <br /><br />
-  Code:
-  <br /><br />
-  URL:
-  <code
-    ><a :href="url">{{ url }}</a></code
-  ><br />
-  HTML: <code> &lt;img src=&quot;{{ url }}&quot; alt=&quot;{{ alt }}&quot; /&gt; </code><br />
-  Markdown: <code>![{{ alt }}]({{ url }})</code>
+      Preview:
+      <br /><br />
+      <img :src="url" :alt="alt" :height="50" />
+      <br /><br />
+      Code:
+      <br /><br />
+      URL:
+      <code>{{ url }}</code
+      ><br />
+      HTML: <code> &lt;img src=&quot;{{ url }}&quot; alt=&quot;{{ alt }}&quot; /&gt; </code><br />
+      Markdown: <code>![{{ alt }}]({{ url }})</code>
+
+      <br />
+      <br />
+      <br />
+    </div>
+  </section>
 </template>
 
-<style>
+<style lang="scss">
+  @import 'bulma/sass/utilities/initial-variables';
+  @import 'bulma/bulma.sass';
+
   a {
     text-decoration: none;
     color: inherit;
