@@ -43,6 +43,18 @@
         color.value = simpleIcons.get(slug).hex
       })
 
+      const updateLogoAndColor = (text: string) => {
+        const newIcon = simpleIcons.get(text)
+
+        if (!newIcon) return
+
+        color.value = newIcon.hex
+        logo.value = newIcon.slug
+      }
+
+      watch(label, updateLogoAndColor)
+      watch(message, updateLogoAndColor)
+
       return {
         label,
         message,
